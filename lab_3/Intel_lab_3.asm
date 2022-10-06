@@ -44,19 +44,19 @@ Start:
   mov [hStdOut], eax
   invoke GetStdHandle, [STD_INP_HNDL]
   mov [hStdIn], eax
-  
-    fld [memB]
-    fsin
+                      
+    fld [memB] ; записываем memB в вершину стека
+    fsin ; перезаписываем в ST0 значение sin(ST0)=sin(memB)
     
-    fld [memA] ; ST0 = A, ST1 = sin(B)
-    fsub ST0, ST1 ; ST0 = ST0 - ST1 = A - sin(B)
-    fadd [dop] ; ST0 = S = A + 1/2 - sin(B)
+    fld [memA] ; добавляем в стек memA, теперь ST0 = memA, ST1 = sin(memB)
+    fsub ST0, ST1 ; производим вычитание, ST0 = ST0 - ST1 = A - sin(B)
+    fadd [dop] ; добавляем к ST0 содержимое dop, теперь ST0 = S = A + 1/2 - sin(B)
     fst [memS] ; записываем результат в переменную S
-    fld [memA] ; ST0 = A, ST1 = S
+    fld [memA] ; вновь добавляем в стек memA, теперь ST0 = A, ST1 = S
     
-    fcomi ST0, ST1
-    jz Equal
-    jc Less
+    fcomi ST0, ST1 ; производим сравнение ST0 и ST1
+    jz Equal ; в случае ST0 = ST1 переходим на метку Equal
+    jc Less ; в случае ST0 < ST1 переходим на метку Less
 
     invoke WriteConsoleA, [hStdOut], mes3, mes3Len, chrsWritten, 0
     JMP Exit
