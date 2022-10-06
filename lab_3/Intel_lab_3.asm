@@ -13,11 +13,11 @@ section '.idata' import data readable
 
 
 section '.data' data readable writeable
-  memA Dd 200307.21 ;делимое
-  memB Dd 157202.5 ;делитель
+  memA Dd 200307.21 ;РґРµР»РёРјРѕРµ
+  memB Dd 157202.5 ;РґРµР»РёС‚РµР»СЊ
   
-  memS Dd 0 ; переменная S, которая будет получена после вычислений
-  dop DD 0.5
+  memS Dd 0 ; РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ С‡РёСЃР»Р° Р·Р°РїРёСЃРё С‡РёСЃР»Р° S
+  dop Dd 0.5
   
 
   conTitle db 'Console', 0
@@ -45,18 +45,18 @@ Start:
   invoke GetStdHandle, [STD_INP_HNDL]
   mov [hStdIn], eax
                       
-    fld [memB] ; записываем memB в вершину стека
-    fsin ; перезаписываем в ST0 значение sin(ST0)=sin(memB)
+    fld [memB] ; Р·Р°РїРёСЃС‹РІР°РµРј memB РІ РІРµСЂС€РёРЅСѓ СЃС‚РµРєР°
+    fsin ; РїРµСЂРµР·Р°РїРёСЃС‹РІР°РµРј РІ ST0 Р·РЅР°С‡РµРЅРёРµ sin(ST0)=sin(memB)
     
-    fld [memA] ; добавляем в стек memA, теперь ST0 = memA, ST1 = sin(memB)
-    fsub ST0, ST1 ; производим вычитание, ST0 = ST0 - ST1 = A - sin(B)
-    fadd [dop] ; добавляем к ST0 содержимое dop, теперь ST0 = S = A + 1/2 - sin(B)
-    fst [memS] ; записываем результат в переменную S
-    fld [memA] ; вновь добавляем в стек memA, теперь ST0 = A, ST1 = S
+    fld [memA] ; РґРѕР±Р°РІР»СЏРµРј РІ СЃС‚РµРє memA, С‚РµРїРµСЂСЊ ST0 = memA, ST1 = sin(memB)
+    fsub ST0, ST1 ; РїСЂРѕРёР·РІРѕРґРёРј РІС‹С‡РёС‚Р°РЅРёРµ, ST0 = ST0 - ST1 = A - sin(B)
+    fadd [dop] ; РґРѕР±Р°РІР»СЏРµРј Рє ST0 СЃРѕРґРµСЂР¶РёРјРѕРµ dop, С‚РµРїРµСЂСЊ ST0 = S = A + 1/2 - sin(B)
+    fst [memS] ; Р·Р°РїРёСЃС‹РІР°РµРј СЂРµР·СѓР»СЊС‚Р°С‚ РІ РїРµСЂРµРјРµРЅРЅСѓСЋ S
+    fld [memA] ; РІРЅРѕРІСЊ РґРѕР±Р°РІР»СЏРµРј РІ СЃС‚РµРє memA, С‚РµРїРµСЂСЊ ST0 = A, ST1 = S
     
-    fcomi ST0, ST1 ; производим сравнение ST0 и ST1
-    jz Equal ; в случае ST0 = ST1 переходим на метку Equal
-    jc Less ; в случае ST0 < ST1 переходим на метку Less
+    fcomi ST0, ST1 ; РїСЂРѕРёР·РІРѕРґРёРј СЃСЂР°РІРЅРµРЅРёРµ ST0 Рё ST1
+    jz Equal ; РІ СЃР»СѓС‡Р°Рµ ST0 = ST1 РїРµСЂРµС…РѕРґРёРј РЅР° РјРµС‚РєСѓ Equal
+    jc Less ; РІ СЃР»СѓС‡Р°Рµ ST0 < ST1 РїРµСЂРµС…РѕРґРёРј РЅР° РјРµС‚РєСѓ Less
 
     invoke WriteConsoleA, [hStdOut], mes3, mes3Len, chrsWritten, 0
     JMP Exit
